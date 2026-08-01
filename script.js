@@ -58,14 +58,17 @@
     }
 
     function connectParticles() {
+        const maxDistance = 120;
+        const maxDistanceSq = maxDistance * maxDistance;
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 120) {
+                const distSq = dx * dx + dy * dy;
+                if (distSq < maxDistanceSq) {
+                    const ratio = 1 - distSq / maxDistanceSq;
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(196, 93, 62, ${0.03 * (1 - dist / 120)})`;
+                    ctx.strokeStyle = `rgba(196, 93, 62, ${0.03 * ratio})`;
                     ctx.lineWidth = 0.5;
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
@@ -191,18 +194,41 @@
     const navLinks = document.querySelector('.sidebar .nav-links');
     const navLinkItems = document.querySelectorAll('.nav-link-item');
     const sections = document.querySelectorAll('.section, .hero');
+    const progressBar = document.getElementById('progress-bar');
+    const backToTop = document.getElementById('back-to-top');
+
+    const sectionData = Array.from(sections).map(section => ({
+        id: section.getAttribute('id'),
+        el: section
+    }));
+
+    let scrollTicking = false;
+
+    function updateScrollEffects() {
+        const scrollY = window.scrollY;
+        let current = 'hero';
+        sectionData.forEach(({ id, el }) => {
+            const top = el.offsetTop - 150;
+            if (scrollY >= top) current = id;
+        });
+
+        navLinkItems.forEach(link => {
+            const active = link.dataset.section === current;
+            link.classList.toggle('active', active);
+        });
+
+        const scrollTop = document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        progressBar.style.width = scrollHeight ? `${(scrollTop / scrollHeight) * 100}%` : '0%';
+        backToTop.classList.toggle('visible', scrollY > 400);
+        scrollTicking = false;
+    }
 
     window.addEventListener('scroll', () => {
-        // Active section highlight
-        let current = 'hero';
-        sections.forEach(section => {
-            const top = section.offsetTop - 150;
-            if (window.scrollY >= top) current = section.getAttribute('id');
-        });
-        navLinkItems.forEach(link => {
-            link.classList.remove('active');
-            if (link.dataset.section === current) link.classList.add('active');
-        });
+        if (!scrollTicking) {
+            scrollTicking = true;
+            requestAnimationFrame(updateScrollEffects);
+        }
     });
 
     if (navToggle) {
@@ -217,20 +243,6 @@
             if (navToggle) navToggle.classList.remove('active');
             if (navLinks) navLinks.classList.remove('active');
         });
-    });
-
-    /* ==================== PROGRESS BAR ==================== */
-    const progressBar = document.getElementById('progress-bar');
-    window.addEventListener('scroll', () => {
-        const scrollTop = document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        progressBar.style.width = (scrollTop / scrollHeight * 100) + '%';
-    });
-
-    /* ==================== BACK TO TOP ==================== */
-    const backToTop = document.getElementById('back-to-top');
-    window.addEventListener('scroll', () => {
-        backToTop.classList.toggle('visible', window.scrollY > 400);
     });
 
     /* ==================== PROJECT FILTERS ==================== */
