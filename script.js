@@ -144,12 +144,13 @@
     }
 
     /* ==================== SCROLL REVEAL ==================== */
+    document.body.classList.add('js-reveal-active');
     const revealElements = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
 
     function checkReveal() {
         revealElements.forEach(el => {
             const rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight * 0.95 && rect.bottom > 0) {
+            if (rect.top < window.innerHeight * 1.2 && rect.bottom > -100) {
                 el.classList.add('revealed');
             }
         });
@@ -159,11 +160,11 @@
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry, i) => {
                 if (entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('revealed'), i * 50);
+                    setTimeout(() => entry.target.classList.add('revealed'), i * 30);
                     revealObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.05, rootMargin: '0px 0px 50px 0px' });
+        }, { threshold: 0.01, rootMargin: '100px 0px 100px 0px' });
 
         revealElements.forEach(el => revealObserver.observe(el));
     }

@@ -339,13 +339,14 @@ img {
 .reveal-up,
 .reveal-left,
 .reveal-right {
-    opacity: 0;
+    opacity: 1;
+    transform: translate(0, 0);
     transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.reveal-up { transform: translateY(40px); }
-.reveal-left { transform: translateX(-40px); }
-.reveal-right { transform: translateX(40px); }
+.js-reveal-active .reveal-up:not(.revealed) { opacity: 0; transform: translateY(40px); }
+.js-reveal-active .reveal-left:not(.revealed) { opacity: 0; transform: translateX(-40px); }
+.js-reveal-active .reveal-right:not(.revealed) { opacity: 0; transform: translateX(40px); }
 
 .reveal-up.revealed,
 .reveal-left.revealed,
