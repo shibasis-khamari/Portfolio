@@ -350,8 +350,8 @@ img {
 .reveal-up.revealed,
 .reveal-left.revealed,
 .reveal-right.revealed {
-    opacity: 1;
-    transform: translate(0, 0);
+    opacity: 1 !important;
+    transform: translate(0, 0) !important;
 }
 
 /* ==================== HERO ==================== */

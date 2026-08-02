@@ -146,16 +146,32 @@
     /* ==================== SCROLL REVEAL ==================== */
     const revealElements = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
 
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => entry.target.classList.add('revealed'), i * 100);
-                revealObserver.unobserve(entry.target);
+    function checkReveal() {
+        revealElements.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.95 && rect.bottom > 0) {
+                el.classList.add('revealed');
             }
         });
-    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+    }
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('revealed'), i * 50);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px 50px 0px' });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    }
+
+    // Initial fallback check
+    checkReveal();
+    window.addEventListener('scroll', checkReveal);
+    window.addEventListener('load', checkReveal);
 
     /* ==================== SKILL BARS ==================== */
     const skillBars = document.querySelectorAll('.skill-bar');
