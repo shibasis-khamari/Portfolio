@@ -414,9 +414,43 @@
     });
 
     if (resumeViewer) {
-        resumeViewer.addEventListener('error', () => {
-            resumeViewer.style.display = 'none';
-            document.getElementById('resume-fallback').style.display = 'flex';
-        });
+        const resumeImg = document.getElementById('resume-img-viewer');
+        const resumeFallback = document.getElementById('resume-fallback');
+        const resumeDownloadBtn = document.getElementById('resume-download');
+
+        function tryImageResume() {
+            if (resumeImg) {
+                const img = new Image();
+                img.onload = () => {
+                    resumeViewer.style.display = 'none';
+                    resumeImg.style.display = 'block';
+                    if (resumeFallback) resumeFallback.style.display = 'none';
+                    if (resumeDownloadBtn) resumeDownloadBtn.href = 'resume.jpg';
+                };
+                img.onerror = () => {
+                    // Try png as well
+                    const pngImg = new Image();
+                    pngImg.onload = () => {
+                        resumeViewer.style.display = 'none';
+                        resumeImg.src = 'resume.png';
+                        resumeImg.style.display = 'block';
+                        if (resumeFallback) resumeFallback.style.display = 'none';
+                        if (resumeDownloadBtn) resumeDownloadBtn.href = 'resume.png';
+                    };
+                    pngImg.onerror = () => {
+                        resumeViewer.style.display = 'none';
+                        if (resumeImg) resumeImg.style.display = 'none';
+                        if (resumeFallback) resumeFallback.style.display = 'flex';
+                    };
+                    pngImg.src = 'resume.png';
+                };
+                img.src = 'resume.jpg';
+            } else {
+                resumeViewer.style.display = 'none';
+                if (resumeFallback) resumeFallback.style.display = 'flex';
+            }
+        }
+
+        resumeViewer.addEventListener('error', tryImageResume);
     }
 })();
