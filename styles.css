@@ -1063,27 +1063,57 @@ img {
 }
 
 /* ==================== IWT PROJECT ==================== */
-.iwt-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
+.iwt-slider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.iwt-viewport {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.iwt-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.iwt-slide {
+    min-width: 100%;
+    padding: 8px;
 }
 
 .iwt-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 40px 32px;
+    padding: 40px 32px 64px;
     text-align: center;
     transition: var(--transition-slow);
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
 }
 
 .iwt-card:hover {
     border-color: var(--border-hover);
     transform: translateY(-2px);
+}
+
+.iwt-num {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
 }
 
 .iwt-icon {
@@ -1109,6 +1139,47 @@ img {
     color: var(--text-secondary);
     margin-bottom: 32px;
     line-height: 1.8;
+}
+
+.iwt-btn {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.iwt-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.iwt-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.iwt-indicator {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 1px;
 }
 
 /* ==================== TESTIMONIALS ==================== */
@@ -1855,5 +1926,12 @@ img {
     .hero-stats {
         flex-direction: column;
         gap: 16px;
+    }
+    .iwt-slider {
+        gap: 8px;
+    }
+    .iwt-btn {
+        width: 36px;
+        height: 36px;
     }
 }

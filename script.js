@@ -322,6 +322,74 @@
         }, 5000);
     });
 
+    /* ==================== IWT SLIDER (circular) ==================== */
+    const iwtTrack = document.getElementById('iwt-track');
+    const iwtPrev = document.getElementById('iwt-prev');
+    const iwtNext = document.getElementById('iwt-next');
+    const iwtIndicator = document.getElementById('iwt-indicator');
+
+    if (iwtTrack) {
+        const DURATION = 550;
+
+        let realSlides = Array.from(iwtTrack.querySelectorAll('.iwt-slide'));
+        let count = realSlides.length;
+        let iwtIndex = 0;
+        let moving = false;
+
+        if (count > 1) {
+            const firstClone = realSlides[0].cloneNode(true);
+            const lastClone = realSlides[count - 1].cloneNode(true);
+            iwtTrack.innerHTML = '';
+            iwtTrack.appendChild(lastClone);
+            realSlides.forEach(s => iwtTrack.appendChild(s));
+            iwtTrack.appendChild(firstClone);
+        }
+
+        const children = Array.from(iwtTrack.querySelectorAll('.iwt-slide'));
+        let current = count > 1 ? 1 : 0;
+
+        function setTransform(noAnim) {
+            iwtTrack.style.transition = noAnim ? 'none' : '';
+            iwtTrack.style.transform = `translateX(-${current * 100}%)`;
+        }
+
+        function applyState() {
+            if (iwtIndicator) iwtIndicator.textContent = (iwtIndex + 1) + ' / ' + count;
+        }
+
+        function goTo(target) {
+            if (moving || count <= 1) return;
+            moving = true;
+            current = target;
+            setTransform(false);
+            setTimeout(() => {
+                if (current === 0) {
+                    current = count;
+                    iwtIndex = count - 1;
+                } else if (current === count + 1) {
+                    current = 1;
+                    iwtIndex = 0;
+                } else {
+                    iwtIndex = current - 1;
+                }
+                setTransform(true);
+                applyState();
+                moving = false;
+            }, DURATION);
+        }
+
+        if (iwtPrev) iwtPrev.addEventListener('click', () => goTo(current === 0 ? count + 1 : current - 1));
+        if (iwtNext) iwtNext.addEventListener('click', () => goTo(current === count + 1 ? 0 : current + 1));
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') goTo(current === 0 ? count + 1 : current - 1);
+            if (e.key === 'ArrowRight') goTo(current === count + 1 ? 0 : current + 1);
+        });
+
+        setTransform(true);
+        applyState();
+    }
+
     /* ==================== CONTACT FORM ==================== */
     const form = document.getElementById('contact-form');
     form.addEventListener('submit', e => {
