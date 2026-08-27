@@ -417,13 +417,18 @@
     const photoPlaceholder = document.getElementById('photo-placeholder');
 
     if (heroPhotoImg) {
-        heroPhotoImg.addEventListener('load', () => {
+        const setLoaded = () => {
             heroPhotoImg.classList.add('loaded');
             if (photoPlaceholder) photoPlaceholder.classList.add('hidden');
-        });
-        heroPhotoImg.addEventListener('error', () => {
-            heroPhotoImg.style.display = 'none';
-        });
+        };
+        if (heroPhotoImg.complete && heroPhotoImg.naturalWidth > 0) {
+            setLoaded();
+        } else {
+            heroPhotoImg.addEventListener('load', setLoaded);
+            heroPhotoImg.addEventListener('error', () => {
+                heroPhotoImg.style.display = 'none';
+            });
+        }
     }
 
     // 3D tilt on hero photo

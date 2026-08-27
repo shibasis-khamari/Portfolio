@@ -714,6 +714,18 @@ img {
     z-index: 1;
 }
 
+.about-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: var(--transition);
+}
+
+.about-image-wrapper:hover .about-photo {
+    transform: scale(1.03);
+}
+
 .about-image-placeholder {
     width: 100%;
     height: 100%;
