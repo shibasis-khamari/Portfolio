@@ -1075,6 +1075,12 @@ img {
 }
 
 /* ==================== IWT PROJECT ==================== */
+#iwt {
+    background: linear-gradient(135deg, rgba(196, 93, 62, 0.08), rgba(61, 122, 107, 0.09));
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
 .iwt-slider {
     display: flex;
     align-items: center;
@@ -1766,7 +1772,7 @@ img {
     .photo-ring-2 { width: 270px; height: 270px; }
     .photo-ring-2 .ring-dot { transform: rotate(calc(360deg / 5 * var(--i))) translateX(135px) translateY(-3px); }
     .photo-ring-3 { width: 270px; height: 270px; }
-    .photo-ring-3 .ring-tech { transform: rotate(calc(360deg / 6 * var(--i))) translateX(132px) translateY(-10px); }
+    .photo-ring-3 .ring-tech { transform: rotate(calc(360deg / 6 * var(--i))) translateX(132px) translateY(-10px); font-size: 0.55rem; }
     .photo-frame { width: 150px; height: 150px; }
 }
 

@@ -355,6 +355,16 @@
 
         function applyState() {
             if (iwtIndicator) iwtIndicator.textContent = (iwtIndex + 1) + ' / ' + count;
+
+            const activeSlide = children[current];
+            const section = document.getElementById('iwt');
+            if (activeSlide && section) {
+                const imageUrl = activeSlide.dataset.iwtImage;
+                if (imageUrl) {
+                    activeSlide.querySelector('.iwt-card').style.backgroundImage = `url("${imageUrl}")`;
+                    section.style.backgroundImage = `linear-gradient(rgba(245, 240, 235, 0.82), rgba(245, 240, 235, 0.82)), url("${imageUrl}")`;
+                }
+            }
         }
 
         function goTo(target) {
